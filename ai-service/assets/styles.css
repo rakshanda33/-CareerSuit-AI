@@ -1,0 +1,221 @@
+/* ==========================================================
+   AI Resume Analyzer V2
+   ========================================================== */
+
+
+/* ==========================================================
+   Score Card
+   ========================================================== */
+
+.score-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 32px;
+    border-radius: 18px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.35);
+    margin-bottom: 20px;
+}
+
+.score-number {
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.score-label {
+    margin-top: 10px;
+    font-size: 15px;
+    opacity: 0.9;
+}
+
+.verdict-chip {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 8px 22px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.25);
+    font-size: 14px;
+    font-weight: 700;
+    backdrop-filter: blur(10px);
+}
+
+
+/* ==========================================================
+   Progress Bar
+   ========================================================== */
+
+.progress-wrapper {
+    margin-top: 25px;
+    width: 100%;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 14px;
+    background: rgba(255,255,255,.25);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.8s ease;
+}
+
+
+/* ==========================================================
+   Result Cards
+   ========================================================== */
+
+.result-card {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: .25s ease;
+}
+
+.result-card:hover {
+    transform: translateY(-3px);
+    border-color: #667eea;
+    box-shadow: 0 10px 20px rgba(102,126,234,.18);
+}
+
+.result-card h3,
+.result-card h4 {
+    margin-top: 0;
+}
+
+
+/* ==========================================================
+   Skill Chips
+   ========================================================== */
+
+.skill-chip {
+    display: inline-block;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:7px 15px;
+    border-radius:999px;
+    margin:6px;
+    font-size:13px;
+    font-weight:600;
+}
+
+
+/* ==========================================================
+   Hero Banner
+   ========================================================== */
+
+.hero-banner {
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    color:white;
+    margin-bottom:20px;
+    box-shadow:0 12px 30px rgba(102,126,234,.35);
+}
+
+.hero-title {
+    font-size:42px;
+    font-weight:800;
+}
+
+.hero-subtitle {
+    margin-top:10px;
+    font-size:18px;
+    opacity:.95;
+}
+
+.hero-version {
+    margin-top:8px;
+    opacity:.8;
+    font-size:14px;
+}
+
+.hero-badge {
+    display:inline-block;
+    margin:6px;
+    padding:8px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.3);
+    font-size:14px;
+    font-weight:600;
+    backdrop-filter:blur(10px);
+}
+
+
+/* ==========================================================
+   Buttons
+   ========================================================== */
+
+.stButton button {
+    border-radius:10px;
+    font-weight:600;
+}
+
+.stDownloadButton button {
+    width:100%;
+    border-radius:12px;
+    font-weight:700;
+}
+
+
+/* ==========================================================
+   Upload Section
+   ========================================================== */
+
+.stFileUploader {
+    margin-top:10px;
+    padding-top:10px;
+}
+
+.stSuccess {
+    border-radius:12px;
+}
+
+
+/* ==========================================================
+   Streamlit Containers
+   ========================================================== */
+
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius:16px;
+}
+
+[data-testid="stMetric"] {
+    border-radius:12px;
+}
+
+[data-testid="stMetric"] > div {
+    padding:12px;
+}
+
+
+/* ==========================================================
+   Lists
+   ========================================================== */
+
+ul {
+    padding-left:18px;
+}
+
+li {
+    margin-bottom:8px;
+}
+
+
+/* ==========================================================
+   Divider
+   ========================================================== */
+
+hr {
+    margin-top:2rem;
+    margin-bottom:2rem;
+}
