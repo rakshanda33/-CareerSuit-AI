@@ -1,33 +1,38 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { loginUser } from "../services/authService";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
   const handleLogin = async () => {
-  try {
-    const response = await loginUser(email, password);
-    const data = response.data;
+    try {
+      const response = await loginUser(email, password);
+      const data = response.data;
 
-    // Save JWT token
-    localStorage.setItem("token", data.token);
+      // Save JWT token
+      localStorage.setItem("token", data.token);
 
-    setMessage(data.message);
+      setMessage(data.message);
 
-    if (data.success === "true") {
-      navigate("/dashboard");
+      if (data.success === "true") {
+        // If user came from a feature, go to that feature.
+        // Otherwise, go to Dashboard.
+        const redirectTo = location.state?.redirectTo || "/dashboard";
+
+        navigate(redirectTo);
+      }
+    } catch (error) {
+      console.error(error);
+      setMessage("Server Error");
     }
-  } catch (error) {
-    console.error(error);
-    setMessage("Server Error");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100">
