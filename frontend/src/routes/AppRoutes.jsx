@@ -1,3 +1,4 @@
+import JobMatch from "../pages/JobMatch";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "../pages/Home";
@@ -22,6 +23,14 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/job-match"
+  element={
+    <ProtectedRoute>
+      <JobMatch />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
   );
