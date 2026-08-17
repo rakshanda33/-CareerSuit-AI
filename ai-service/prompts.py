@@ -1,5 +1,10 @@
 # prompts.py
 
+
+# ──────────────────────────────────────────────────────────────
+# Resume Analysis
+# ──────────────────────────────────────────────────────────────
+
 RESUME_ANALYSIS_PROMPT = """
 You are a senior technical recruiter with 10+ years hiring engineers at top tech companies.
 
@@ -45,6 +50,11 @@ RESUME TEXT:
 {resume_text}
 """
 
+
+# ──────────────────────────────────────────────────────────────
+# ATS Job Match
+# ──────────────────────────────────────────────────────────────
+
 ATS_MATCH_PROMPT = """
 You are an ATS (Applicant Tracking System) scanner.
 
@@ -71,10 +81,22 @@ JOB DESCRIPTION:
 {job_description}
 """
 
+
+# ──────────────────────────────────────────────────────────────
+# Bullet Point Rewriter
+# ──────────────────────────────────────────────────────────────
+
 BULLET_REWRITE_PROMPT = """
 You are an expert resume writer.
+
 Rewrite the bullet point below into 3 stronger versions.
-Rules: strong action verb, quantified impact where possible, under 20 words each.
+
+Rules:
+- Use strong action verbs.
+- Quantify impact where possible.
+- Do not invent facts, numbers, achievements, technologies, or responsibilities.
+- Keep each version under 20 words.
+- Make each version professional and ATS-friendly.
 
 OUTPUT FORMAT — read carefully:
 Respond with ONLY a single JSON object and nothing else.
@@ -91,4 +113,66 @@ The very first character of your response must be {{ and the very last character
 }}
 
 BULLET: {bullet}
+"""
+
+
+# ──────────────────────────────────────────────────────────────
+# Resume Tailor
+# ──────────────────────────────────────────────────────────────
+
+RESUME_TAILOR_PROMPT = """
+You are an expert resume writer, technical recruiter, and ATS optimization specialist.
+
+Your task is to tailor a candidate's resume for a specific job description.
+
+IMPORTANT RULES:
+- Do not invent experience, education, projects, certifications, skills, responsibilities, or achievements.
+- Only use information that is actually present in the resume.
+- Do not create fake metrics or numbers.
+- Improve wording and presentation while preserving the candidate's actual experience.
+- Identify relevant keywords from the job description.
+- Only recommend keywords that are relevant to the candidate's existing background.
+- Make the content professional, concise, and ATS-friendly.
+- Prioritize skills and experience that are relevant to the target job.
+- Keep the candidate's original meaning intact.
+- Do not claim the candidate has experience they do not have.
+
+OUTPUT FORMAT — read carefully:
+Respond with ONLY a single JSON object and nothing else.
+Do not include markdown code fences (no ``` of any kind).
+Do not include any explanation, preamble, or commentary before or after the JSON.
+Do not say "Here is the tailored resume" or anything similar.
+The very first character of your response must be {{ and the very last character must be }}.
+
+Required structure:
+{{
+    "professional_summary": "<tailored 2-3 sentence professional summary based only on the resume>",
+    "key_skills": [
+        "<relevant skill 1>",
+        "<relevant skill 2>",
+        "<relevant skill 3>",
+        "<relevant skill 4>",
+        "<relevant skill 5>"
+    ],
+    "tailored_bullets": [
+        {{
+            "original": "<original resume bullet>",
+            "improved": "<improved ATS-friendly version>"
+        }}
+    ],
+    "keywords_to_add": [
+        "<relevant keyword from job description that is missing or weakly represented>"
+    ],
+    "recommendations": [
+        "<specific recommendation for tailoring the resume>",
+        "<specific recommendation for improving ATS compatibility>",
+        "<specific recommendation for highlighting relevant experience>"
+    ]
+}}
+
+RESUME:
+{resume_text}
+
+JOB DESCRIPTION:
+{job_description}
 """

@@ -1,17 +1,27 @@
 # analyzer.py
 
 import time
-from components.ui import load_css
+
 from google import genai
 from google.genai import types
 
-from config import GEMINI_API_KEY, GEMINI_MODEL, TEMPERATURE, THINKING_BUDGET, MAX_TOKENS
+from config import (
+    GEMINI_API_KEY,
+    GEMINI_MODEL,
+    TEMPERATURE,
+    THINKING_BUDGET,
+    MAX_TOKENS,
+)
+
 from prompts import (
     RESUME_ANALYSIS_PROMPT,
     ATS_MATCH_PROMPT,
     BULLET_REWRITE_PROMPT,
+    RESUME_TAILOR_PROMPT,
 )
+
 from utils import parse_json_from_llm
+
 
 # ──────────────────────────────────────────────────────────────
 # Gemini Setup
@@ -32,40 +42,23 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 def _call_gemini(prompt: str) -> str:
     """
-    Internal helper: call Gemini and return raw text.
-    Centralises API call so error handling lives in one place.
+    Central Gemini API helper.
 
-    Two settings here exist specifically to prevent
-    "AI returned no valid JSON":
-
-    1. thinking_config=ThinkingConfig(thinking_budget=THINKING_BUDGET)
-       gemini-2.5-flash is a hybrid reasoning model. By default it spends
-       an invisible "thinking" pass before writing the visible answer,
-       and those thinking tokens are subtracted from max_output_tokens —
-       they are NOT a separate budget. On a non-trivial prompt (e.g. a
-       4000-character resume + a 9-field JSON schema), thinking can
-       consume the entire token budget, leaving response.text as None
-       or a short truncated fragment with no JSON in it at all.
-       Setting thinking_budget=0 disables that hidden phase, so the
-       full max_output_tokens budget goes to the actual JSON answer.
-
-    2. response_mime_type="application/json"
-       This tells Gemini's API layer itself to constrain output to
-       valid JSON, as a second line of defense independent of the
-       prompt text ("Return ONLY JSON" can still be ignored by the
-       model; response_mime_type is enforced by the API).
-
-    On top of that, this function retries transient server-side failures
-    (HTTP 503 UNAVAILABLE, internal errors, timeouts) with exponential
-    backoff, since those are usually momentary and resolve on their own.
-    It does NOT retry MAX_TOKENS, quota/rate-limit, or auth errors —
-    those are deterministic and retrying won't help.
+    Handles:
+    - JSON output
+    - Thinking budget
+    - Empty responses
+    - MAX_TOKENS
+    - Temporary Gemini failures
+    - Rate limits
+    - API key errors
     """
 
     MAX_RETRIES = 5
     last_error: Exception | None = None
 
     for attempt in range(MAX_RETRIES):
+
         try:
             response = client.models.generate_content(
                 model=GEMINI_MODEL,
@@ -80,28 +73,38 @@ def _call_gemini(prompt: str) -> str:
                 ),
             )
 
-            # Inspect finish_reason BEFORE trusting response.text.
-            # If generation stopped because of MAX_TOKENS, response.text
-            # can be None (fully truncated) or a partial fragment with no
-            # closing brace — either way, treat it as a distinct,
-            # diagnosable failure instead of letting it fall through to a
-            # generic "no JSON" error. This is NOT retried: a higher
-            # token budget or shorter input is needed, not another try.
-            candidates = getattr(response, "candidates", None)
-            finish_reason = None
-            if candidates:
-                finish_reason = getattr(candidates[0], "finish_reason", None)
+            # ──────────────────────────────────────────────
+            # Check finish reason
+            # ──────────────────────────────────────────────
 
-            finish_reason_name = getattr(finish_reason, "name", finish_reason)
+            candidates = getattr(response, "candidates", None)
+
+            finish_reason = None
+
+            if candidates:
+                finish_reason = getattr(
+                    candidates[0],
+                    "finish_reason",
+                    None
+                )
+
+            finish_reason_name = getattr(
+                finish_reason,
+                "name",
+                finish_reason
+            )
 
             if finish_reason_name == "MAX_TOKENS":
                 raise RuntimeError(
-                    "Gemini ran out of output tokens before finishing the "
-                    "JSON response (finish_reason=MAX_TOKENS). "
-                    "This usually means max_output_tokens is too low for "
-                    "this prompt. Increase MAX_TOKENS in config.py, or "
-                    "shorten the resume/job description input."
+                    "Gemini ran out of output tokens before finishing "
+                    "the JSON response (finish_reason=MAX_TOKENS). "
+                    "Increase MAX_TOKENS in config.py or shorten the "
+                    "resume/job description input."
                 )
+
+            # ──────────────────────────────────────────────
+            # Read response
+            # ──────────────────────────────────────────────
 
             text = response.text
 
@@ -109,24 +112,25 @@ def _call_gemini(prompt: str) -> str:
                 raise RuntimeError(
                     "Gemini returned an empty response "
                     f"(finish_reason={finish_reason_name}). "
-                    "This can happen due to safety filtering or an "
-                    "unexpected empty generation. Try again."
+                    "This can happen because of safety filtering or "
+                    "an unexpected empty generation. Try again."
                 )
 
             return text
 
         except RuntimeError:
-            # Re-raise our own diagnosable RuntimeErrors above unchanged
-            # — they are deterministic (bad config/empty output), not
-            # transient, so retrying would not help.
+            # Deterministic errors should not be retried.
             raise
 
         except Exception as e:
+
             error_msg = str(e).lower()
             last_error = e
 
-            # Only retry transient, server-side issues. Quota and auth
-            # errors are deterministic and retrying wastes time/quota.
+            # ──────────────────────────────────────────────
+            # Retryable errors
+            # ──────────────────────────────────────────────
+
             is_retryable = (
                 "503" in error_msg
                 or "unavailable" in error_msg
@@ -137,16 +141,23 @@ def _call_gemini(prompt: str) -> str:
             )
 
             if is_retryable and attempt < MAX_RETRIES - 1:
-                wait_time = 2 ** attempt  # 1s, 2s, 4s, 8s
+
+                wait_time = 2 ** attempt
+
                 print(
-                    f"Gemini temporarily unavailable (attempt "
-                    f"{attempt + 1}/{MAX_RETRIES}): {e}. "
+                    f"Gemini temporarily unavailable "
+                    f"(attempt {attempt + 1}/{MAX_RETRIES}): {e}. "
                     f"Retrying in {wait_time}s..."
                 )
+
                 time.sleep(wait_time)
+
                 continue
 
-            # Quota / rate limit — not retryable, fail fast with a clear message
+            # ──────────────────────────────────────────────
+            # Quota / Rate Limit
+            # ──────────────────────────────────────────────
+
             if (
                 "quota" in error_msg
                 or "rate" in error_msg
@@ -167,7 +178,10 @@ Google is temporarily blocking requests because the free limit was reached.
 """
                 )
 
-            # API key problems — not retryable
+            # ──────────────────────────────────────────────
+            # API Key Problems
+            # ──────────────────────────────────────────────
+
             if (
                 "api key" in error_msg
                 or "401" in error_msg
@@ -182,24 +196,30 @@ Google is temporarily blocking requests because the free limit was reached.
 Check:
 1. .env file exists
 2. GEMINI_API_KEY is correct
-3. Restart Streamlit after changing .env
+3. Restart the AI service after changing .env
 """
                 )
 
-            # Retryable error type, but we've exhausted all attempts
+            # ──────────────────────────────────────────────
+            # Retryable error after all attempts
+            # ──────────────────────────────────────────────
+
             if is_retryable:
                 raise RuntimeError(
                     "⚠️ The Gemini service is temporarily unavailable "
-                    f"after {MAX_RETRIES} attempts. Please try again in "
-                    f"a few moments. (Last error: {e})"
+                    f"after {MAX_RETRIES} attempts. Please try again "
+                    f"in a few moments. (Last error: {e})"
                 )
 
-            # Anything else: unrecognised, non-retryable error
-            raise RuntimeError(f"Gemini API Error: {e}")
+            # ──────────────────────────────────────────────
+            # Unknown error
+            # ──────────────────────────────────────────────
 
-    # Defensive fallback — the loop above always returns or raises,
-    # but this satisfies static analysis and guards against a logic
-    # change that accidentally falls through the loop silently.
+            raise RuntimeError(
+                f"Gemini API Error: {e}"
+            )
+
+    # Defensive fallback
     raise RuntimeError(
         f"Gemini API call failed after {MAX_RETRIES} attempts. "
         f"Last error: {last_error}"
@@ -220,6 +240,7 @@ def analyze_resume(resume_text: str) -> dict:
     )
 
     raw = _call_gemini(prompt)
+
     return parse_json_from_llm(raw)
 
 
@@ -241,16 +262,17 @@ def check_ats_match(
     )
 
     raw = _call_gemini(prompt)
+
     return parse_json_from_llm(raw)
 
 
 # ──────────────────────────────────────────────────────────────
-# Bullet Rewriter
+# Bullet Point Rewriter
 # ──────────────────────────────────────────────────────────────
 
 def rewrite_bullet(bullet: str) -> list[str]:
     """
-    Rewrite a weak bullet into stronger versions.
+    Rewrite a weak resume bullet into stronger versions.
     """
 
     prompt = BULLET_REWRITE_PROMPT.format(
@@ -258,6 +280,44 @@ def rewrite_bullet(bullet: str) -> list[str]:
     )
 
     raw = _call_gemini(prompt)
+
     result = parse_json_from_llm(raw)
 
     return result.get("rewrites", [])
+
+
+# ──────────────────────────────────────────────────────────────
+# Resume Tailor
+# ──────────────────────────────────────────────────────────────
+
+def tailor_resume(
+    resume_text: str,
+    job_description: str
+) -> dict:
+    """
+    Tailor a resume for a specific job description.
+
+    The AI:
+    - Creates a tailored professional summary
+    - Identifies relevant skills
+    - Improves existing resume bullets
+    - Finds relevant missing keywords
+    - Provides ATS-focused recommendations
+
+    The AI must not invent:
+    - Experience
+    - Skills
+    - Achievements
+    - Metrics
+    - Certifications
+    - Responsibilities
+    """
+
+    prompt = RESUME_TAILOR_PROMPT.format(
+        resume_text=resume_text[:5000],
+        job_description=job_description[:3000]
+    )
+
+    raw = _call_gemini(prompt)
+
+    return parse_json_from_llm(raw)
