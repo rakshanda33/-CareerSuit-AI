@@ -25,3 +25,8 @@ export const jobMatch = (formData) =>
       "Content-Type": "multipart/form-data",
     },
   });
+// Bullet Point Rewriter
+export const rewriteBullet = (bullet) =>
+  API.post("/rewrite-bullet", {
+    bullet,
+  });

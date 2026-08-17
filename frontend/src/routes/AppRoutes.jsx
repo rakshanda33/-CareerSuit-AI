@@ -6,6 +6,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import BulletRewriter from "../pages/BulletRewriter";
 
 function AppRoutes() {
   return (
@@ -24,13 +25,21 @@ function AppRoutes() {
           }
         />
         <Route
-  path="/job-match"
-  element={
-    <ProtectedRoute>
-      <JobMatch />
-    </ProtectedRoute>
-  }
-/>
+        path="/job-match"
+        element={
+          <ProtectedRoute>
+            <JobMatch />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+      path="/bullet-rewriter"
+      element={
+        <ProtectedRoute>
+         <BulletRewriter />
+        </ProtectedRoute>
+      }
+    />
       </Routes>
     </BrowserRouter>
   );

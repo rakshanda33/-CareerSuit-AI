@@ -48,29 +48,44 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-100 p-10">
-      <h1 className="text-4xl font-bold text-blue-600">
-        Career Dashboard 👋
-      </h1>
+
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold text-blue-600">
+          Career Dashboard 👋
+        </h1>
+      </div>
 
       {/* Top Cards */}
       <div className="grid md:grid-cols-3 gap-6 mt-10">
 
+        {/* Resume Score */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold">Resume Score</h2>
+          <h2 className="text-xl font-bold">
+            Resume Score
+          </h2>
+
           <p className="text-4xl text-blue-600 mt-3">
             {analysis ? `${analysis.score}%` : "--"}
           </p>
         </div>
 
+        {/* Verdict */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold">Verdict</h2>
+          <h2 className="text-xl font-bold">
+            Verdict
+          </h2>
+
           <p className="text-2xl text-green-600 mt-3">
             {analysis ? analysis.verdict : "--"}
           </p>
         </div>
 
+        {/* Skills */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold">Skills</h2>
+          <h2 className="text-xl font-bold">
+            Skills
+          </h2>
 
           <div className="mt-3 flex flex-wrap gap-2">
             {analysis ? (
@@ -90,8 +105,63 @@ function Dashboard() {
 
       </div>
 
+      {/* AI Career Tools */}
+      <div className="mt-10">
+
+        <h2 className="text-2xl font-bold text-slate-800 mb-5">
+          AI Career Tools
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+
+          {/* Job Match */}
+          <button
+            onClick={() => navigate("/job-match")}
+            className="bg-white p-6 rounded-2xl shadow hover:shadow-md text-left transition"
+          >
+            <h2 className="text-xl font-bold text-blue-600">
+              Job Description Match
+            </h2>
+
+            <p className="text-gray-600 mt-2">
+              Compare your resume with a job description and find your ATS
+              match score, matched skills, and missing keywords.
+            </p>
+
+            <span className="inline-block mt-4 text-blue-600 font-semibold">
+              Check Job Match →
+            </span>
+          </button>
+
+          {/* Bullet Rewriter */}
+          <button
+            onClick={() => navigate("/bullet-rewriter")}
+            className="bg-white p-6 rounded-2xl shadow hover:shadow-md text-left transition"
+          >
+            <h2 className="text-xl font-bold text-purple-600">
+              Bullet Point Rewriter
+            </h2>
+
+            <p className="text-gray-600 mt-2">
+              Transform weak resume bullet points into stronger,
+              achievement-focused statements using AI.
+            </p>
+
+            <span className="inline-block mt-4 text-purple-600 font-semibold">
+              Rewrite Bullet →
+            </span>
+          </button>
+
+        </div>
+
+      </div>
+
       {/* Upload Section */}
       <div className="mt-10 flex flex-col gap-4 max-w-md">
+
+        <h2 className="text-2xl font-bold text-slate-800">
+          Resume Analyzer
+        </h2>
 
         <input
           type="file"
@@ -135,39 +205,60 @@ function Dashboard() {
             AI Resume Analysis
           </h2>
 
+          {/* Summary */}
           <p className="mb-6">
             <strong>Summary:</strong> {analysis.summary}
           </p>
 
-          <h3 className="text-xl font-bold mb-2">Strengths</h3>
+          {/* Strengths */}
+          <h3 className="text-xl font-bold mb-2">
+            Strengths
+          </h3>
+
           <ul className="list-disc ml-6 mb-6">
             {analysis.strengths.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
 
-          <h3 className="text-xl font-bold mb-2">Weaknesses</h3>
+          {/* Weaknesses */}
+          <h3 className="text-xl font-bold mb-2">
+            Weaknesses
+          </h3>
+
           <ul className="list-disc ml-6 mb-6">
             {analysis.weaknesses.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
 
-          <h3 className="text-xl font-bold mb-2">Improvements</h3>
+          {/* Improvements */}
+          <h3 className="text-xl font-bold mb-2">
+            Improvements
+          </h3>
+
           <ul className="list-disc ml-6 mb-6">
             {analysis.improvements.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
 
-          <h3 className="text-xl font-bold mb-2">Missing Sections</h3>
+          {/* Missing Sections */}
+          <h3 className="text-xl font-bold mb-2">
+            Missing Sections
+          </h3>
+
           <ul className="list-disc ml-6 mb-6">
             {analysis.missing_sections.map((item, index) => (
               <li key={index}>{item}</li>
             ))}
           </ul>
 
-          <h3 className="text-xl font-bold mb-2">ATS Issues</h3>
+          {/* ATS Issues */}
+          <h3 className="text-xl font-bold mb-2">
+            ATS Issues
+          </h3>
+
           <ul className="list-disc ml-6">
             {analysis.ats_issues.map((item, index) => (
               <li key={index}>{item}</li>
@@ -176,6 +267,7 @@ function Dashboard() {
 
         </div>
       )}
+
     </div>
   );
 }
