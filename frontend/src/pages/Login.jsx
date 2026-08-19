@@ -11,25 +11,64 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      setMessage("Please enter your email and password.");
+      return;
+    }
+
     try {
+      setLoading(true);
+      setMessage("");
+
       const response = await loginUser(email, password);
       const data = response.data;
 
-      localStorage.setItem("token", data.token);
+      // Only store login information when login is successful
+      if (data.success === true || data.success === "true") {
+        // JWT token
+        localStorage.setItem("token", data.token);
 
-      setMessage(data.message);
+        // User information
+        if (data.userId) {
+          localStorage.setItem("userId", String(data.userId));
+        }
 
-      if (data.success === "true") {
+        if (data.name) {
+          localStorage.setItem("userName", data.name);
+        }
+
+        if (data.email) {
+          localStorage.setItem("userEmail", data.email);
+        }
+
+        setMessage(data.message || "Login Successful");
+
+        // Preserve redirect flow
         const redirectTo =
           location.state?.redirectTo || "/dashboard";
 
         navigate(redirectTo);
+      } else {
+        setMessage(data.message || "Invalid Credentials");
+
+        // Make sure old auth data is not left behind
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userEmail");
       }
     } catch (error) {
-      console.error(error);
-      setMessage("Server Error");
+      console.error("Login Error:", error);
+
+      setMessage(
+        error.response?.data?.message ||
+          "Server Error. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,6 +81,7 @@ function Login() {
         <div className="relative hidden w-1/2 overflow-hidden bg-gradient-to-br from-blue-600 via-blue-600 to-purple-600 p-12 text-white md:flex md:flex-col md:justify-between">
 
           <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+
           <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-purple-300/20 blur-3xl" />
 
           <div className="relative">
@@ -95,10 +135,14 @@ function Login() {
               onClick={() => navigate("/")}
               className="mb-10 text-xl font-extrabold text-blue-600 md:hidden"
             >
-              CareerSuit <span className="text-purple-600">AI</span>
+              CareerSuit{" "}
+              <span className="text-purple-600">
+                AI
+              </span>
             </button>
 
             <div className="mb-8">
+
               <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
                 Welcome back
               </p>
@@ -110,10 +154,12 @@ function Login() {
               <p className="mt-3 text-slate-500">
                 Continue building your career with AI.
               </p>
+
             </div>
 
             {/* Email */}
             <div>
+
               <label className="mb-2 block text-sm font-semibold text-slate-700">
                 Email
               </label>
@@ -122,23 +168,42 @@ function Login() {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setMessage("");
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
               />
+
             </div>
 
             {/* Password */}
             <div className="mt-5">
+
               <label className="mb-2 block text-sm font-semibold text-slate-700">
                 Password
               </label>
 
               <div className="relative">
+
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setMessage("");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 pr-20 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
 
@@ -149,15 +214,18 @@ function Login() {
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
+
               </div>
+
             </div>
 
             {/* Login */}
             <Button
               className="mt-7 w-full py-3.5"
               onClick={handleLogin}
+              disabled={loading}
             >
-              Login →
+              {loading ? "Logging in..." : "Login →"}
             </Button>
 
             {/* Message */}
@@ -175,15 +243,19 @@ function Login() {
 
             {/* Signup */}
             <p className="mt-7 text-center text-sm text-slate-500">
+
               Don't have an account?{" "}
+
               <button
                 onClick={() => navigate("/signup")}
                 className="bg-transparent p-0 font-semibold text-blue-600 hover:bg-transparent hover:text-blue-700"
               >
                 Create one
               </button>
+
             </p>
 
+            {/* Back */}
             <button
               onClick={() => navigate("/")}
               className="mt-5 w-full bg-transparent text-center text-sm text-slate-400 hover:bg-transparent hover:text-slate-600"

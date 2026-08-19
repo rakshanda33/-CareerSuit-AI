@@ -1,21 +1,37 @@
 import axios from "axios";
 
-const API = axios.create({
+// ─────────────────────────────────────────────
+// Spring Boot Backend
+// Port: 8080
+// ─────────────────────────────────────────────
+
+const BACKEND_API = axios.create({
+  baseURL: "http://localhost:8080",
+});
+
+
+// ─────────────────────────────────────────────
+// FastAPI AI Service
+// Port: 8000
+// ─────────────────────────────────────────────
+
+const AI_API = axios.create({
   baseURL: "http://localhost:8000",
 });
 
+
 // ─────────────────────────────────────────────
-// Authentication
+// Authentication — Spring Boot
 // ─────────────────────────────────────────────
 
 export const loginUser = (email, password) =>
-  API.post("/login", {
+  BACKEND_API.post("/login", {
     email,
     password,
   });
 
 export const registerUser = (name, email, password) =>
-  API.post("/register", {
+  BACKEND_API.post("/register", {
     name,
     email,
     password,
@@ -23,11 +39,11 @@ export const registerUser = (name, email, password) =>
 
 
 // ─────────────────────────────────────────────
-// Resume Analysis
+// Resume Analysis — FastAPI
 // ─────────────────────────────────────────────
 
 export const uploadResume = (formData) =>
-  API.post("/analyze", formData, {
+  AI_API.post("/analyze", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -35,11 +51,11 @@ export const uploadResume = (formData) =>
 
 
 // ─────────────────────────────────────────────
-// Job Description Match
+// Job Description Match — FastAPI
 // ─────────────────────────────────────────────
 
 export const jobMatch = (formData) =>
-  API.post("/job-match", formData, {
+  AI_API.post("/job-match", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -47,21 +63,21 @@ export const jobMatch = (formData) =>
 
 
 // ─────────────────────────────────────────────
-// Bullet Point Rewriter
+// Bullet Point Rewriter — FastAPI
 // ─────────────────────────────────────────────
 
 export const rewriteBullet = (bullet) =>
-  API.post("/rewrite-bullet", {
+  AI_API.post("/rewrite-bullet", {
     bullet,
   });
 
 
 // ─────────────────────────────────────────────
-// Resume Tailor
+// Resume Tailor — FastAPI
 // ─────────────────────────────────────────────
 
 export const tailorResume = (formData) =>
-  API.post("/resume-tailor", formData, {
+  AI_API.post("/resume-tailor", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -69,10 +85,33 @@ export const tailorResume = (formData) =>
 
 
 // ─────────────────────────────────────────────
-// Download Tailored Resume as Editable DOCX
+// Download Tailored Resume — FastAPI
 // ─────────────────────────────────────────────
 
 export const downloadTailoredResume = (result) =>
-  API.post("/resume-tailor/download", result, {
+  AI_API.post("/resume-tailor/download", result, {
+    responseType: "blob",
+  });
+
+
+// ─────────────────────────────────────────────
+// Resume Storage — Spring Boot
+// ─────────────────────────────────────────────
+
+export const saveResume = (formData) =>
+  BACKEND_API.post("/api/resumes/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+export const getUserResumes = (userId) =>
+  BACKEND_API.get(`/api/resumes/user/${userId}`);
+
+export const deleteResume = (resumeId) =>
+  BACKEND_API.delete(`/api/resumes/${resumeId}`);
+
+export const getResumeFile = (resumeId) =>
+  BACKEND_API.get(`/api/resumes/${resumeId}/file`, {
     responseType: "blob",
   });
