@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from api.routes import analyze, ats, rewrite, upload
+from api.routes import analyze, ats, rewrite, upload, job_match, resume_tailor,download
 from api.middleware.errorhandler import (
     handle_runtime_error,
     handle_value_error,
@@ -58,6 +58,9 @@ app.include_router(analyze.router)
 app.include_router(ats.router)
 app.include_router(rewrite.router)
 app.include_router(upload.router)
+app.include_router(job_match.router)
+app.include_router(resume_tailor.router)
+app.include_router(download.router)
 
 # ---------------- Health ---------------- #
 
