@@ -1,56 +1,89 @@
 # 🚀 CareerSuit AI
 
-<div align="center">
+**An AI-powered career optimization platform for resume analysis, ATS matching, and job-specific resume tailoring.**
 
-![CareerSuit AI](https://img.shields.io/badge/AI-Powered%20Career%20Platform-6C63FF?style=for-the-badge)
-![Full Stack](https://img.shields.io/badge/Full--Stack-Application-00C9A7?style=for-the-badge)
-![Gemini AI](https://img.shields.io/badge/Powered%20By-Gemini%20API-4285F4?style=for-the-badge)
-
-</div>
-
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react\&logoColor=black)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Backend-6DB33F?logo=springboot\&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-AI%20Service-009688?logo=fastapi)
+![Gemini](https://img.shields.io/badge/Google-Gemini%20API-4285F4)
 
 ## 📌 Overview
 
-**CareerSuit AI** is an AI-powered career optimization platform that helps job seekers improve their resumes through intelligent analysis, ATS compatibility scoring, and personalized AI recommendations.
+CareerSuit AI helps job seekers analyze their resumes, evaluate their alignment with job descriptions, and generate tailored resumes using Generative AI. It combines a React frontend, Spring Boot backend, FastAPI AI service, Oracle Database, and Google Gemini API.
 
-The platform combines **Full-Stack Development, Generative AI, NLP, and Backend Engineering** to provide users with actionable resume insights similar to professional resume review systems.
+## ✨ Features
 
-Users can upload their resume, analyze their profile, compare it against job descriptions, identify skill gaps, and receive AI-generated improvement suggestions.
+* **Resume Analysis:** AI-generated feedback, resume quality scoring, strengths, weaknesses, and improvement suggestions.
+* **ATS Matching:** Resume-to-job-description matching, keyword identification, and potential skill gaps.
+* **Resume Tailoring:** Generate job-specific resumes from an existing resume and target job description, with DOCX download.
+* **Bullet-Point Rewriting:** Improve the clarity and presentation of resume bullet points.
+* **Authentication:** User registration, login, and JWT-based authentication.
+* **Resume Management:** Store and manage resume-related data.
 
+## 🛠️ Tech Stack
 
----
+| Component      | Technologies                       |
+| -------------- | ---------------------------------- |
+| Frontend       | React.js, Vite, JavaScript         |
+| Backend        | Java, Spring Boot, Spring Security |
+| AI Service     | Python, FastAPI                    |
+| AI Integration | Google Gemini API                  |
+| Database       | Oracle Database                    |
+| Authentication | JWT                                |
+| API Testing    | Thunder Client, Swagger UI         |
 
-# ✨ Features
+## 🏗️ Architecture
 
+```text
+React + Vite
+     │
+     ▼
+Spring Boot ───────► Oracle Database
+     │
+     ▼
+FastAPI AI Service
+     │
+     ▼
+Google Gemini API
+```
 
-## 📄 AI Resume Analysis
+## ⚙️ Getting Started
 
-Analyze resumes using Generative AI and NLP.
+**Prerequisites:** Node.js, Java, Python, Oracle Database, and a Google Gemini API key.
 
-Features:
+1. Clone the repository:
 
-- ✅ Resume quality score
-- ✅ AI-generated resume evaluation
-- ✅ Strength identification
-- ✅ Weakness detection
-- ✅ Missing section analysis
-- ✅ Resume improvement suggestions
-- ✅ Skill extraction
+   ```bash
+   git clone https://github.com/rakshanda33/-CareerSuit-AI.git
+   cd -CareerSuit-AI
+   ```
 
+2. Configure your database credentials and Gemini API key using the environment variables or configuration expected by your application.
 
----
+3. Start the Spring Boot backend from the directory containing `pom.xml`:
 
-## 🎯 ATS Resume Matching
+   ```bash
+   mvnw.cmd spring-boot:run
+   ```
 
-Optimize resumes according to specific job descriptions.
+4. Start the FastAPI service from the directory containing `api/main.py`:
 
-Features:
+   ```bash
+   uvicorn api.main:app --reload --port 8000
+   ```
 
-- ✅ ATS compatibility score
-- ✅ Job description matching
-- ✅ Matching keywords detection
-- ✅ Missing keywords identification
-- ✅ Skill gap analysis
-- ✅ Personalized recommendations
+5. Start the React frontend from the directory containing `package.json`:
 
+   ```bash
+   npm install
+   npm run dev
+   ```
 
+*Note: Verify the directory paths, configuration, and environment variable names against your repository before running these commands.*
+
+## 👩‍💻 Author
+
+**Rakshanda Noor**
+B.Tech Computer Science & Engineering, Jamia Hamdard
+
+[GitHub](https://github.com/rakshanda33) · [LinkedIn](https://linkedin.com/in/rakshanda-noor-9aaa24291/)
