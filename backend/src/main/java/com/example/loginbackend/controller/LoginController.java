@@ -17,17 +17,18 @@ public class LoginController {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public LoginController(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder,
-                           JwtService jwtService) {
-
+    public LoginController(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(
+    public Map<String, Object> login(
             @RequestBody Map<String, String> data
     ) {
 
@@ -38,25 +39,29 @@ public class LoginController {
 
         // Debug logs
         System.out.println("Email received: " + email);
-        System.out.println("Password received: " + password);
 
-        if (existingUser != null) {
-            System.out.println("Database password: " + existingUser.getPassword());
-        } else {
+        if (existingUser == null) {
             System.out.println("User not found");
         }
 
         // Verify password using BCrypt
         if (existingUser != null &&
-                passwordEncoder.matches(password, existingUser.getPassword())) {
+                passwordEncoder.matches(
+                        password,
+                        existingUser.getPassword()
+                )) {
 
-            // Generate JWT Token
-            String token = jwtService.generateToken(existingUser.getEmail());
+            // Generate JWT token
+            String token =
+                    jwtService.generateToken(existingUser.getEmail());
 
             return Map.of(
                     "success", "true",
                     "message", "Login Successful",
-                    "token", token
+                    "token", token,
+                    "userId", existingUser.getId(),
+                    "name", existingUser.getName(),
+                    "email", existingUser.getEmail()
             );
         }
 
