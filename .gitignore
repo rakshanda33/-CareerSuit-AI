@@ -26,3 +26,8 @@ Thumbs.db
 # Uploaded resumes
 backend/uploads/
 commands.txt
+
+# Environment files
+.env.*
+!.env.example
+env.txt

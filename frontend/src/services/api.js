@@ -6,7 +6,7 @@ import axios from "axios";
 // ─────────────────────────────────────────────
 
 const BACKEND_API = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://careersuit-backend-sc54.onrender.com",
 });
 
 
