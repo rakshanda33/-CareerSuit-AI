@@ -50,10 +50,10 @@
         <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
 
-    <!-- Oracle Database Driver -->
+    <!-- PostgreSQL Database Driver -->
     <dependency>
-        <groupId>com.oracle.database.jdbc</groupId>
-        <artifactId>ojdbc11</artifactId>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
         <scope>runtime</scope>
     </dependency>
 

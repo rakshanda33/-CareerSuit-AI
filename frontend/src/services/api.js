@@ -15,8 +15,9 @@ const BACKEND_API = axios.create({
 // Port: 8000
 // ─────────────────────────────────────────────
 
+
 const AI_API = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: import.meta.env.VITE_AI_API_URL || "http://localhost:8000",
 });
 
 
