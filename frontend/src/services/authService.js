@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://careersuit-backend-sc54.onrender.com",
 });
 
 export const loginUser = (email, password) =>
