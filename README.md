@@ -1,89 +1,143 @@
-# 🚀 CareerSuit AI
+# CareerSuit AI
 
-**An AI-powered career optimization platform for resume analysis, ATS matching, and job-specific resume tailoring.**
+**CareerSuit AI** is a full-stack AI-powered career platform built with React, Spring Boot, FastAPI, PostgreSQL, and Google Gemini API. It helps users analyze resumes, evaluate job compatibility, tailor resumes, and improve resume bullet points using AI.
 
-![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react\&logoColor=black)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Backend-6DB33F?logo=springboot\&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-AI%20Service-009688?logo=fastapi)
-![Gemini](https://img.shields.io/badge/Google-Gemini%20API-4285F4)
+## 🚀 Features
 
-## 📌 Overview
-
-CareerSuit AI helps job seekers analyze their resumes, evaluate their alignment with job descriptions, and generate tailored resumes using Generative AI. It combines a React frontend, Spring Boot backend, FastAPI AI service, Oracle Database, and Google Gemini API.
-
-## ✨ Features
-
-* **Resume Analysis:** AI-generated feedback, resume quality scoring, strengths, weaknesses, and improvement suggestions.
-* **ATS Matching:** Resume-to-job-description matching, keyword identification, and potential skill gaps.
-* **Resume Tailoring:** Generate job-specific resumes from an existing resume and target job description, with DOCX download.
-* **Bullet-Point Rewriting:** Improve the clarity and presentation of resume bullet points.
-* **Authentication:** User registration, login, and JWT-based authentication.
-* **Resume Management:** Store and manage resume-related data.
+- **User Authentication:** User registration and login.
+- **Resume Analysis:** Upload resumes and receive AI-powered feedback and an ATS-style score.
+- **Job Match:** Compare resumes with job requirements and identify matching keywords.
+- **Resume Tailoring:** Generate job-specific, tailored resumes with downloadable DOCX files.
+- **Bullet Rewriter:** Improve resume bullet points using AI.
+- **Resume Management:** View and manage previously uploaded resumes.
+- **AI Integration:** Uses Google Gemini API for AI-powered resume and career assistance.
 
 ## 🛠️ Tech Stack
 
-| Component      | Technologies                       |
-| -------------- | ---------------------------------- |
-| Frontend       | React.js, Vite, JavaScript         |
-| Backend        | Java, Spring Boot, Spring Security |
-| AI Service     | Python, FastAPI                    |
-| AI Integration | Google Gemini API                  |
-| Database       | Oracle Database                    |
-| Authentication | JWT                                |
-| API Testing    | Thunder Client, Swagger UI         |
+| Component | Technology |
+|---|---|
+| Frontend | React, Vite, JavaScript, CSS |
+| Backend | Java, Spring Boot |
+| AI Service | Python, FastAPI |
+| Database | PostgreSQL |
+| AI Model | Google Gemini API |
+| API Communication | Axios, REST APIs |
+| API Testing | Postman, Thunder Client, Swagger UI |
+| Frontend Deployment | Vercel |
+| Backend & AI Deployment | Render |
 
 ## 🏗️ Architecture
 
 ```text
-React + Vite
-     │
-     ▼
-Spring Boot ───────► Oracle Database
-     │
-     ▼
-FastAPI AI Service
-     │
-     ▼
-Google Gemini API
+React Frontend (Vercel)
+        |
+        | REST API Requests
+        |
+        +----------------------+
+        |                      |
+        v                      v
+Spring Boot Backend       FastAPI AI Service
+(Render)                  (Render)
+        |                      |
+        v                      v
+PostgreSQL Database       Google Gemini API
 ```
 
-## ⚙️ Getting Started
+## ⚙️ Installation & Setup
 
-**Prerequisites:** Node.js, Java, Python, Oracle Database, and a Google Gemini API key.
+### Prerequisites
 
-1. Clone the repository:
+- Node.js and npm
+- Java 21 or compatible Java version
+- Python 3.10+
+- PostgreSQL
+- Google Gemini API key
 
-   ```bash
-   git clone https://github.com/rakshanda33/-CareerSuit-AI.git
-   cd -CareerSuit-AI
-   ```
+### 1. Clone the Repository
 
-2. Configure your database credentials and Gemini API key using the environment variables or configuration expected by your application.
+```bash
+git clone https://github.com/rakshanda33/-CareerSuit-AI.git
+cd -CareerSuit-AI
+```
 
-3. Start the Spring Boot backend from the directory containing `pom.xml`:
+### 2. Start the Spring Boot Backend
 
-   ```bash
-   mvnw.cmd spring-boot:run
-   ```
+Navigate to the backend directory containing `mvnw.cmd` and run:
 
-4. Start the FastAPI service from the directory containing `api/main.py`:
+```bash
+mvnw.cmd spring-boot:run
+```
 
-   ```bash
-   uvicorn api.main:app --reload --port 8000
-   ```
+The backend runs locally on `http://localhost:8080`.
 
-5. Start the React frontend from the directory containing `package.json`:
+Configure the PostgreSQL connection and required environment variables in the backend configuration before starting the service.
 
-   ```bash
-   npm install
-   npm run dev
-   ```
+### 3. Start the FastAPI AI Service
 
-*Note: Verify the directory paths, configuration, and environment variable names against your repository before running these commands.*
+Navigate to the AI service directory containing `api/main.py` and install its dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Configure your Google Gemini API key using the environment variable or configuration expected by the application, then start the service:
+
+```bash
+uvicorn api.main:app --reload --port 8000
+```
+
+The AI service runs locally on `http://localhost:8000`.
+
+API documentation is available at:
+
+`http://localhost:8000/docs`
+
+### 4. Start the React Frontend
+
+Navigate to the frontend directory and install dependencies:
+
+```bash
+npm install
+npm run dev
+```
+
+The frontend runs locally at `http://localhost:5173`.
+
+## 🌐 Live Deployment
+
+| Service | URL |
+|---|---|
+| Frontend | Add your deployed Vercel URL |
+| Spring Boot Backend | https://careersuit-backend-sc54.onrender.com |
+| FastAPI AI Service | https://careersuit-ai.onrender.com |
+| AI Service Health Check | https://careersuit-ai.onrender.com/health |
+
+## 🧪 Testing
+
+The main application workflows have been tested:
+
+- User registration and login
+- Resume upload and analysis
+- Job matching with scores and keyword results
+- Resume tailoring and DOCX download
+
+API endpoints were tested using **Postman**, **Thunder Client**, and FastAPI's **Swagger UI** (`/docs`).
+
+## 🔮 Future Improvements
+
+- Strengthen backend authentication and authorization.
+- Add automated tests for frontend and backend workflows.
+- Improve error handling and validation.
+- Enhance resume analysis and job-matching capabilities.
+- Add more AI-powered career preparation tools.
 
 ## 👩‍💻 Author
 
 **Rakshanda Noor**
-B.Tech Computer Science & Engineering, Jamia Hamdard
 
-[GitHub](https://github.com/rakshanda33) · [LinkedIn](https://linkedin.com/in/rakshanda-noor-9aaa24291/)
+- GitHub: [rakshanda33](https://github.com/rakshanda33)
+- LinkedIn: [Rakshanda Noor](https://www.linkedin.com/in/rakshanda-noor-9aaa24291/)
+
+---
+
+*Built as a final-year B.Tech Computer Science & Engineering project.*
