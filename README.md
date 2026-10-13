@@ -1,6 +1,24 @@
 # CareerSuit AI
 
-**CareerSuit AI** is a full-stack AI-powered career platform built with React, Spring Boot, FastAPI, PostgreSQL, and Google Gemini API. It helps users analyze resumes, evaluate job compatibility, tailor resumes, and improve resume bullet points using AI.
+# 🚀 CareerSuit AI
+
+**An AI-powered career optimization platform for resume analysis, ATS matching, and job-specific resume tailoring.**
+
+![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-Build%20Tool-646CFF?logo=vite&logoColor=white)
+![Java](https://img.shields.io/badge/Java-Backend-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Backend-6DB33F?logo=springboot&logoColor=white)
+![Python](https://img.shields.io/badge/Python-AI%20Service-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-AI%20Service-009688?logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4169E1?logo=postgresql&logoColor=white)
+![Google Gemini API](https://img.shields.io/badge/Google-Gemini%20API-4285F4?logo=googlegemini&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-Language-F7DF1E?logo=javascript&logoColor=black)
+![Axios](https://img.shields.io/badge/Axios-HTTP%20Client-5A29E4?logo=axios&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-API%20Testing-FF6C37?logo=postman&logoColor=white)
+![Thunder Client](https://img.shields.io/badge/Thunder%20Client-API%20Testing-7B61FF?logo=thunderclient&logoColor=white)
+![Swagger UI](https://img.shields.io/badge/Swagger-API%20Documentation-85EA2D?logo=swagger&logoColor=black)
+![Vercel](https://img.shields.io/badge/Vercel-Frontend%20Deployment-000000?logo=vercel&logoColor=white)
+![Render](https://img.shields.io/badge/Render-Backend%20Deployment-46E3B7?logo=render&logoColor=black)
 
 ## 🚀 Features
 
