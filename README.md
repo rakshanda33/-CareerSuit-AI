@@ -154,6 +154,16 @@ API endpoints were tested using **Postman**, **Thunder Client**, and FastAPI's *
 - GitHub: [rakshanda33](https://github.com/rakshanda33)
 - LinkedIn: [Rakshanda Noor](https://www.linkedin.com/in/rakshanda-noor-9aaa24291/)
 
+## © Copyright & License
+
+Copyright © 2026 Rakshanda Noor. All rights reserved.
+
+This repository is provided for viewing and portfolio evaluation purposes only. Copying, redistributing, modifying, or using this project's source code without prior written permission from the copyright holder is prohibited, except where permitted by applicable law.
+
+For permission to use this project or its source code, please contact the copyright holder.
+
+**No open-source license is granted.**
+
 ---
 
 *Built as a final-year B.Tech Computer Science & Engineering project.*
