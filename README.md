@@ -1,7 +1,5 @@
 # CareerSuit AI
 
-# CareerSuit AI
-
 **An AI-powered career optimization platform for resume analysis, ATS matching, and job-specific resume tailoring.**
 
 ![React](https://img.shields.io/badge/React-Frontend-61DAFB?logo=react&logoColor=black)
